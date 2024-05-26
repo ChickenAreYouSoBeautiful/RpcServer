@@ -2,7 +2,10 @@ package com.mi.consumer;
 
 import com.mi.common.model.User;
 import com.mi.common.service.UserService;
+import com.mi.rpcServer.RpcApplication;
+import com.mi.rpcServer.config.RpcConfig;
 import com.mi.rpcServer.proxy.ServiceProxyFactory;
+import com.mi.rpcServer.util.ConfigUtil;
 
 /**
  * @author mi11
@@ -19,10 +22,8 @@ public class EasyConsumer {
 //        UserService userService = null;
 //        String userName = userService.getUserName(user);
 //        System.out.println(userName);
-
         UserService userServiceProxy = ServiceProxyFactory.getProxy(UserService.class);
         String userName = userServiceProxy.getUserName(user);
         System.out.println(userName);
-
     }
 }

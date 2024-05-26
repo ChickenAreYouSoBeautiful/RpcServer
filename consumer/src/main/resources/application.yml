@@ -1,0 +1,7 @@
+rpc:
+    name: rpc-server
+    version: 0.0.1
+    serverHost: localhost
+    serverPort: 8080
+    isMock: false
+    serializer: hessian

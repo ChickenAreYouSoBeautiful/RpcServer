@@ -2,6 +2,8 @@ package com.mi.production;
 
 
 import com.mi.common.service.UserService;
+import com.mi.rpcServer.RpcApplication;
+import com.mi.rpcServer.config.RpcConfig;
 import com.mi.rpcServer.registry.LocalRegistry;
 import com.mi.rpcServer.server.VertxHttpServer;
 
@@ -16,9 +18,11 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class EasyProduction {
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        RpcApplication.init();
         LocalRegistry.registry(UserService.class.getName(),UserServiceImpl.class);
         VertxHttpServer vertxHttpServer = new VertxHttpServer();
-        vertxHttpServer.doStart(8080);
+        RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+        vertxHttpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
 
         //测试调用
 //        Class<?> userService = LocalRegistry.getServer("UserService");
