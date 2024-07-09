@@ -6,12 +6,16 @@ import com.mi.rpcServer.RpcApplication;
 import com.mi.rpcServer.config.RpcConfig;
 import com.mi.rpcServer.model.RpcRequest;
 import com.mi.rpcServer.model.RpcResponse;
+import com.mi.rpcServer.model.ServerMetaInfo;
+import com.mi.rpcServer.registry.Registry;
+import com.mi.rpcServer.registry.RegistryFactory;
 import com.mi.rpcServer.serializer.Serializer;
 import com.mi.rpcServer.serializer.SerializerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author mi11
@@ -36,7 +40,18 @@ public class ServiceProxy implements InvocationHandler {
             //try(){} 响应后自动关闭流
             //todo 地址硬编码，需要使用配置中心和服务发现机制解决
             RpcConfig rpcConfig = RpcApplication.getRpcConfig();
-            try (HttpResponse execute = HttpRequest.post(rpcConfig.getServerHost() + ":" + rpcConfig.getServerPort()).body(serialize).execute()) {
+            Registry registry = RegistryFactory.getRegistry(rpcConfig.getRegistryConfig().getRegistryName());
+            ServerMetaInfo serverMetaInfo = new ServerMetaInfo();
+            serverMetaInfo.setServerName(rpcConfig.getName());
+            serverMetaInfo.setServerVersion(rpcConfig.getServerVersion());
+            List<ServerMetaInfo> serverMetaInfos = registry.serverDiscovery(serverMetaInfo.getServerKey());
+
+            if (serverMetaInfos == null || serverMetaInfos.isEmpty()){
+                throw new RuntimeException("没有可用的服务");
+            }
+            ServerMetaInfo server = serverMetaInfos.get(0);
+
+            try (HttpResponse execute = HttpRequest.post(server.getServiceAddress()).body(serialize).execute()) {
                 byte[] result = execute.bodyBytes();
                 RpcResponse deserialize = serializer.deserialize(result, RpcResponse.class);
                 if (!"ok".equals(deserialize.getMessage())) {

@@ -2,6 +2,11 @@ package com.mi.rpcServer.config;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
+import static com.mi.rpcServer.constant.RpcConstant.DEFAULT_SERVER_VERSION;
+import static com.mi.rpcServer.serializer.SerializerKes.JDK;
+
 /**
  * @author mi11
  * @version 1.0
@@ -10,7 +15,7 @@ import lombok.Data;
  * @ClassName RpcConfig
  */
 @Data
-public class RpcConfig {
+public class RpcConfig implements Serializable {
 
     /**
      * 名称
@@ -20,7 +25,7 @@ public class RpcConfig {
     /**
      * 版本
      */
-    private String version = "0.0.1";
+    private String serverVersion = DEFAULT_SERVER_VERSION;
 
     /**
      * 服务器地址
@@ -40,5 +45,10 @@ public class RpcConfig {
     /**
      * 指定序列化器
      */
-    private String serializer = "jdk";
+    private String serializer = JDK;
+
+    /**
+     * 注册中心配置类
+     */
+    private RegistryConfig registryConfig = new RegistryConfig();
 }

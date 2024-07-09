@@ -10,4 +10,10 @@ package com.mi.rpcServer.constant;
 public interface RpcConstant {
 
     String RPC_CONFIG_PREFIX = "rpc";
+
+    String DEFAULT_SERVER_VERSION = "0.0.1";
+
+    String ZK_ROOT_PATH = "/rpc/";
+
+
 }

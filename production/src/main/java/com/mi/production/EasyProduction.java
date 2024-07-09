@@ -3,8 +3,12 @@ package com.mi.production;
 
 import com.mi.common.service.UserService;
 import com.mi.rpcServer.RpcApplication;
+import com.mi.rpcServer.config.RegistryConfig;
 import com.mi.rpcServer.config.RpcConfig;
+import com.mi.rpcServer.model.ServerMetaInfo;
 import com.mi.rpcServer.registry.LocalRegistry;
+import com.mi.rpcServer.registry.Registry;
+import com.mi.rpcServer.registry.RegistryFactory;
 import com.mi.rpcServer.server.VertxHttpServer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,11 +21,27 @@ import java.lang.reflect.InvocationTargetException;
  * @ClassName EasyProduction
  */
 public class EasyProduction {
-    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) {
         RpcApplication.init();
         LocalRegistry.registry(UserService.class.getName(),UserServiceImpl.class);
-        VertxHttpServer vertxHttpServer = new VertxHttpServer();
+
+        //注册服务到注册中心
         RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getRegistry(registryConfig.getRegistryName());
+        ServerMetaInfo serverMetaInfo = new ServerMetaInfo();
+        serverMetaInfo.setServerName(rpcConfig.getName());
+        serverMetaInfo.setServerHost(rpcConfig.getServerHost());
+        serverMetaInfo.setServerPort(rpcConfig.getServerPort());
+
+        try {
+            registry.registry(serverMetaInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        VertxHttpServer vertxHttpServer = new VertxHttpServer();
         vertxHttpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
 
         //测试调用

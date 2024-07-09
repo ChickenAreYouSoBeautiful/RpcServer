@@ -1,7 +1,7 @@
 rpc:
-    name: rpc-server
+    name: com.mi.common.service.UserService
     version: 0.0.1
     serverHost: localhost
-    serverPort: 8080
+    serverPort: 8081
     isMock: false
-    serializer: hessian
+    serializer: jdk

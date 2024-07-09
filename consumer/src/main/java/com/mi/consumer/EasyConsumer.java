@@ -23,6 +23,8 @@ public class EasyConsumer {
 //        String userName = userService.getUserName(user);
 //        System.out.println(userName);
         UserService userServiceProxy = ServiceProxyFactory.getProxy(UserService.class);
+        userServiceProxy.getUserName(user);
+        userServiceProxy.getUserName(user);
         String userName = userServiceProxy.getUserName(user);
         System.out.println(userName);
     }

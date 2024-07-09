@@ -1,14 +1,5 @@
 package com.mi.consumer.proxy;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import com.mi.common.model.User;
-import com.mi.common.service.UserService;
-import com.mi.rpcServer.model.RpcRequest;
-import com.mi.rpcServer.model.RpcResponse;
-
-import java.io.IOException;
-
 /**
  * @author mi11
  * @version 1.0

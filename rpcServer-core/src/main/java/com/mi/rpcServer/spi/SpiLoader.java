@@ -35,14 +35,19 @@ public class SpiLoader {
     private final static String SPI_SYSTEM_PATH = "META-INF/rpc/system/";
 
     /**
-     * 用户自定义加载路径
+     * 用户自定义序列化器加载路径
      */
-    private final static String SPI_CUSTOM_PATH = "META-INF/rpc/custom/";
+    private final static String SPI_CUSTOM_PATH = "META-INF/rpc/serializer/";
+
+    /**
+     * 用户自定义注册中心加载路径
+     */
+    private final static String SPI_REGISTRY_PATH = "META-INF/rpc/registry/";
 
     /**
      * 加载路径列表
      */
-    private static final String[] SPI_PATH_LIST = new String[]{SPI_SYSTEM_PATH, SPI_CUSTOM_PATH};
+    private static final String[] SPI_PATH_LIST = new String[]{SPI_SYSTEM_PATH, SPI_CUSTOM_PATH,SPI_REGISTRY_PATH};
 
     private static final List<Class<?>> LOAD_CLASS_LIST = Collections.singletonList(Serializer.class);
 
